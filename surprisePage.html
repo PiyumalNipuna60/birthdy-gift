@@ -17,13 +17,19 @@
     }
 
     body {
-       --lightness: 50;
       background: #e74;
       overflow: hidden;
       background-image: linear-gradient(to bottom, #190e14, #0d0d4b 30%, #c76075 80%, #e9b64b 95%);
       background-image: radial-gradient(circle at center bottom, #e9b64b, #c76075 15%, #0d0d4b 75%, #190e14 90%);
       margin: 0;
       padding: 0;
+    }
+
+    /* Mobile Responsive Styles */
+    @media (max-width: 768px) {
+      .center-image {
+        top: 70%;
+      }
     }
 
     div#beach,
@@ -42,20 +48,27 @@
       background-repeat: no-repeat;
     }
 
-    /* Center image in the white/light area of the background */
+    /* Center image in the white/light area of the background - Made taller */
     .center-image {
       position: absolute;
-      top: 35%;
+      top: 30%;
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 50;
       max-width: 300px;
-      max-height: 300px;
+      max-height: 450px;
+      /* Increased from 300px to 500px */
+      min-height: 350px;
+      /* Added minimum height */
+      width: auto;
+      height: auto;
       border-radius: 20px;
       box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
       border: 3px solid rgba(255, 255, 255, 0.8);
       opacity: 0;
       transition: all 0.5s ease;
+      object-fit: cover;
+      /* Ensures proper aspect ratio */
     }
 
     .center-image.show {
@@ -200,7 +213,7 @@
       left: 0px;
       bottom: 0px;
       top: 0px;
-      background: linear-gradient(135deg, hsl(180, 30%, calc(var(--lightness, 50) * 1%)), hsl(220, 50%, 70%));
+      background-color: rgb(218, 102, 39);
       transition: background-color 0.5s ease;
     }
 
@@ -587,8 +600,12 @@
     @media (max-width: 768px) {
       .center-image {
         max-width: 250px;
-        max-height: 250px;
-        top: 30%;
+        max-height: 400px;
+        /* Increased from 250px */
+        min-height: 300px;
+        /* Adjusted for mobile */
+        top: 45%;
+        /* Adjusted position for mobile */
       }
 
       .image-gallery {
@@ -633,9 +650,12 @@
 
     @media (min-width: 1000px) {
       .center-image {
-        max-width: 350px;
-        max-height: 350px;
-        top: 40%;
+        max-width: 300px;
+        max-height: 450px;
+        /* Increased from 300px to 500px */
+        min-height: 350px;
+        top: 35%;
+        /* Adjusted position */
       }
 
       .icons {
@@ -675,8 +695,8 @@
   <div id="beach"></div>
   <img src="https://dl.dropbox.com/s/2k0mtrxc2dqurmh/jumping.png" alt="jumping-people" id="people" />
 
-  <!-- Center image that will appear in the white area -->
-  <img src="https://picsum.photos/400/400?random=1" alt="Special Memory" class="center-image" id="centerImage" />
+  <!-- Center image that will appear in the white area - Now taller -->
+  <img src="https://picsum.photos/400/600?random=1" alt="Special Memory" class="center-image" id="centerImage" />
 
   <div id="merrywrap" class="merrywrap">
     <div class="giftbox">
@@ -729,18 +749,20 @@
   </div>
 
   <script>
-    // Sample images - replace with actual image URLs
+    // Sample images - replace with actual image URLs (using taller aspect ratios)
     const galleryImages = [
-      '/assets/logo.jpg',
-      '/assets/logo.jpg',
-      'https://picsum.photos/400/300?random=3',
-      'https://picsum.photos/400/300?random=4',
-      'https://picsum.photos/400/300?random=5',
-      'https://picsum.photos/400/300?random=6',
-      'https://picsum.photos/400/300?random=7',
-      'https://picsum.photos/400/300?random=8',
-      'https://picsum.photos/400/300?random=9',
-      'https://picsum.photos/400/300?random=10'
+      'assets/image1.jpg',
+      'assets/image12.jpg',
+      'assets/image3.jpg',
+      'assets/image4.jpg',
+      'assets/image5.jpg',
+      'assets/image6.jpg',
+      'assets/image7.jpg',
+      'assets/image8.jpg',
+      'assets/image9.jpg',
+      'assets/image10.jpg',
+      'assets/image11.jpg',
+      'assets/image2.jpg'
     ];
 
     // Fireworks code
@@ -930,17 +952,17 @@
       var box = merrywrap.getElementsByClassName("giftbox")[0];
       var step = 1;
       var stepMinutes = [2000, 2000, 1000, 1000];
-      
+
       function init() {
         box.addEventListener("click", openBox, false);
         populateImageGallery();
       }
-      
+
       function stepClass(step) {
         merrywrap.className = 'merrywrap';
         merrywrap.className = 'merrywrap step-' + step;
       }
-      
+
       function openBox() {
         if (step === 1) {
           box.removeEventListener("click", openBox, false);
@@ -954,9 +976,13 @@
         }
         setTimeout(openBox, stepMinutes[step - 1]);
         step++;
+
+        // Add click sound effect for each step
+        playClickSound();
       }
 
       init();
+      createMusicControl();
     };
 
     function populateImageGallery() {
@@ -966,9 +992,49 @@
         img.src = imgSrc;
         img.className = 'gallery-image';
         img.alt = `Memory ${index + 1}`;
-        img.addEventListener('click', () => openModal(imgSrc));
+        img.addEventListener('click', () => {
+          // Change the center image when gallery image is clicked
+          changeCenterImage(imgSrc);
+          // Also open modal
+          openModal(imgSrc);
+        });
         imageScroll.appendChild(img);
       });
+    }
+
+    let currentImageIndex = 0;
+    let autoSlideInterval;
+
+    function changeCenterImage(imageSrc) {
+      const centerImage = document.getElementById('centerImage');
+
+      // Add fade out effect
+      centerImage.style.opacity = '0.3';
+      centerImage.style.transform = 'translate(-50%, -50%) scale(0.9)';
+
+      // Change image after fade out
+      setTimeout(() => {
+        centerImage.src = imageSrc;
+
+        // Fade back in with new image
+        setTimeout(() => {
+          centerImage.style.opacity = '1';
+          centerImage.style.transform = 'translate(-50%, -50%) scale(1.05)';
+        }, 100);
+      }, 300);
+    }
+
+    function startAutoSlideshow() {
+      autoSlideInterval = setInterval(() => {
+        currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
+        changeCenterImage(galleryImages[currentImageIndex]);
+      }, 3000); // Change every 3 seconds
+    }
+
+    function stopAutoSlideshow() {
+      if (autoSlideInterval) {
+        clearInterval(autoSlideInterval);
+      }
     }
 
     function openModal(imgSrc) {
@@ -981,26 +1047,208 @@
     function reveal() {
       document.querySelector('.merrywrap').style.backgroundColor = 'transparent';
       document.getElementById('imageGallery').style.display = 'block';
-      
+
+      // Play birthday music
+      playBirthdayMusic();
+
       // Show the center image with animation
       const centerImage = document.getElementById('centerImage');
+      // Set the first gallery image as the initial center image
+      centerImage.src = galleryImages[0];
+
       setTimeout(() => {
         centerImage.classList.add('show');
+        // Start automatic slideshow after the center image appears
+        setTimeout(() => {
+          startAutoSlideshow();
+        }, 1000);
       }, 500);
 
       loop();
     }
 
+    // Birthday music function
+    function playBirthdayMusic() {
+      // Create audio context
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+      // Birthday song melody notes (Happy Birthday to You)
+      const notes = [
+        { freq: 261.63, duration: 0.5 }, // C4
+        { freq: 261.63, duration: 0.5 }, // C4
+        { freq: 293.66, duration: 1.0 }, // D4
+        { freq: 261.63, duration: 1.0 }, // C4
+        { freq: 349.23, duration: 1.0 }, // F4
+        { freq: 329.63, duration: 2.0 }, // E4
+
+        { freq: 261.63, duration: 0.5 }, // C4
+        { freq: 261.63, duration: 0.5 }, // C4
+        { freq: 293.66, duration: 1.0 }, // D4
+        { freq: 261.63, duration: 1.0 }, // C4
+        { freq: 392.00, duration: 1.0 }, // G4
+        { freq: 349.23, duration: 2.0 }, // F4
+
+        { freq: 261.63, duration: 0.5 }, // C4
+        { freq: 261.63, duration: 0.5 }, // C4
+        { freq: 523.25, duration: 1.0 }, // C5
+        { freq: 440.00, duration: 1.0 }, // A4
+        { freq: 349.23, duration: 1.0 }, // F4
+        { freq: 329.63, duration: 1.0 }, // E4
+        { freq: 293.66, duration: 2.0 }, // D4
+
+        { freq: 466.16, duration: 0.5 }, // Bb4
+        { freq: 466.16, duration: 0.5 }, // Bb4
+        { freq: 440.00, duration: 1.0 }, // A4
+        { freq: 349.23, duration: 1.0 }, // F4
+        { freq: 392.00, duration: 1.0 }, // G4
+        { freq: 349.23, duration: 2.0 }  // F4
+      ];
+
+      let currentTime = audioContext.currentTime;
+
+      notes.forEach((note, index) => {
+        // Create oscillator for each note
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+
+        oscillator.frequency.setValueAtTime(note.freq, currentTime);
+        oscillator.type = 'sine';
+
+        // Envelope for smooth sound
+        gainNode.gain.setValueAtTime(0, currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.3, currentTime + 0.05);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, currentTime + note.duration);
+
+        oscillator.start(currentTime);
+        oscillator.stop(currentTime + note.duration);
+
+        currentTime += note.duration;
+      });
+
+      // Add some background harmony
+      setTimeout(() => {
+        playBackgroundChords(audioContext);
+      }, 1000);
+    }
+
+    function playBackgroundChords(audioContext) {
+      const chords = [
+        [261.63, 329.63, 392.00], // C major
+        [349.23, 440.00, 523.25], // F major
+        [392.00, 493.88, 587.33], // G major
+        [261.63, 329.63, 392.00]  // C major
+      ];
+
+      let currentTime = audioContext.currentTime + 1;
+
+      chords.forEach((chord, chordIndex) => {
+        chord.forEach(freq => {
+          const oscillator = audioContext.createOscillator();
+          const gainNode = audioContext.createGain();
+
+          oscillator.connect(gainNode);
+          gainNode.connect(audioContext.destination);
+
+          oscillator.frequency.setValueAtTime(freq * 0.5, currentTime); // Lower octave
+          oscillator.type = 'triangle';
+
+          gainNode.gain.setValueAtTime(0, currentTime);
+          gainNode.gain.linearRampToValueAtTime(0.1, currentTime + 0.1);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, currentTime + 2);
+
+          oscillator.start(currentTime);
+          oscillator.stop(currentTime + 2);
+        });
+
+        currentTime += 2;
+      });
+    }
+
+    // Click sound effect
+    function playClickSound() {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+
+      oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(200, audioContext.currentTime + 0.1);
+      oscillator.type = 'square';
+
+      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.1);
+    }
+
+    // Add music control button
+    function createMusicControl() {
+      const musicButton = document.createElement('button');
+      musicButton.innerHTML = '🎵';
+      musicButton.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.2);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+        cursor: pointer;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+        display: none;
+      `;
+
+      musicButton.addEventListener('mouseenter', function () {
+        this.style.background = 'rgba(255, 255, 255, 0.3)';
+        this.style.transform = 'scale(1.1)';
+      });
+
+      musicButton.addEventListener('mouseleave', function () {
+        this.style.background = 'rgba(255, 255, 255, 0.2)';
+        this.style.transform = 'scale(1)';
+      });
+
+      let musicPlaying = false;
+      musicButton.addEventListener('click', function () {
+        if (!musicPlaying) {
+          playBirthdayMusic();
+          this.innerHTML = '🔇';
+          musicPlaying = true;
+          setTimeout(() => {
+            this.innerHTML = '🎵';
+            musicPlaying = false;
+          }, 15000); // Reset after 15 seconds
+        }
+      });
+
+      document.body.appendChild(musicButton);
+
+      // Show music button after gift is opened
+      setTimeout(() => {
+        musicButton.style.display = 'block';
+      }, 5000);
+    }
+
     // Modal functionality
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       const modal = document.getElementById('imageModal');
       const closeBtn = document.querySelector('.close');
-      
-      closeBtn.addEventListener('click', function() {
+
+      closeBtn.addEventListener('click', function () {
         modal.style.display = 'none';
       });
-      
-      window.addEventListener('click', function(event) {
+
+      window.addEventListener('click', function (event) {
         if (event.target == modal) {
           modal.style.display = 'none';
         }
@@ -1008,26 +1256,26 @@
     });
 
     // Mouse events for fireworks
-    canvas.addEventListener('mousedown', function(e) {
+    canvas.addEventListener('mousedown', function (e) {
       e.preventDefault();
       mousedown = true;
       mx = e.pageX - canvas.offsetLeft;
       my = e.pageY - canvas.offsetTop;
     });
 
-    canvas.addEventListener('mouseup', function(e) {
+    canvas.addEventListener('mouseup', function (e) {
       e.preventDefault();
       mousedown = false;
     });
 
-    canvas.addEventListener('mousemove', function(e) {
+    canvas.addEventListener('mousemove', function (e) {
       e.preventDefault();
       mx = e.pageX - canvas.offsetLeft;
       my = e.pageY - canvas.offsetTop;
     });
 
     // Touch events for mobile
-    canvas.addEventListener('touchstart', function(e) {
+    canvas.addEventListener('touchstart', function (e) {
       e.preventDefault();
       mousedown = true;
       var touch = e.touches[0];
@@ -1035,12 +1283,12 @@
       my = touch.pageY - canvas.offsetTop;
     });
 
-    canvas.addEventListener('touchend', function(e) {
+    canvas.addEventListener('touchend', function (e) {
       e.preventDefault();
       mousedown = false;
     });
 
-    canvas.addEventListener('touchmove', function(e) {
+    canvas.addEventListener('touchmove', function (e) {
       e.preventDefault();
       var touch = e.touches[0];
       mx = touch.pageX - canvas.offsetLeft;
@@ -1048,7 +1296,7 @@
     });
 
     // Resize handler
-    window.addEventListener('resize', function() {
+    window.addEventListener('resize', function () {
       cw = window.innerWidth;
       ch = window.innerHeight;
       canvas.width = cw;
