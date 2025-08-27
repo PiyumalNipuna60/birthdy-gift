@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Chamiiii! 🎂</title>
+  <link rel="stylesheet" href="https://public.codepenassets.com/css/normalize-5.0.0.min.css">
+  <style>
+    @import "https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap";
+    
+    * {
+      box-sizing: border-box;
+    }
+
+    /* Particle Animation Styles */
+    .particles {
+      --glow-layer: 0 0 0 0 rgba(0, 0, 0, 0);
+      background-color: #fff0;
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.6;
+      touch-action: none;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .particle {
+      --shadow-opacity: 0.06;
+      --depth-opacity: 0.2;
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 1;
+      box-sizing: border-box;
+      box-shadow: var(--glow-layer),
+        1.5015vmin 1.5015vmin 1.5015vmin 0 rgba(0, 0, 0, var(--shadow-opacity)),
+        inset 1.5015vmin 1.5015vmin 1.5015vmin 0 rgba(255, 255, 255, var(--depth-opacity)),
+        inset -1.5015vmin -1.5015vmin 1.5015vmin 0 rgba(0, 0, 0, var(--depth-opacity));
+      transform: translate(0, 0) scale(0) rotate(0);
+      animation: trail linear 0.7s var(--i, 0s) forwards;
+      will-change: transform, opacity;
+      pointer-events: none;
+    }
+
+    @keyframes trail {
+      10% {
+        transform: translate(0, 0) scale(1) rotate(0);
+      }
+      60% {
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--shiftX, 0), var(--shiftY, 0)) scale(0) rotate(1turn);
+        opacity: 0;
+      }
+    }
+
+    /* Birthday Card Styles */
+    :root {
+      --tongue: #c12115;
+      --pupil: #fff;
+      --icing: #f2f2f2;
+      --stroke: #1a1a1a;
+      --primary: #ff4081;
+      --secondary: #7c4dff;
+    }
+
+    html, body {
+      position: relative;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    html {
+      background: radial-gradient(circle at 50%, #fff, #f9f4fa) fixed 0 0 / 100% 100%;
+    }
+
+    body {
+      --frosting: hsl(var(--frosting-hue, 300), 100%, 55%);
+      --lightness: 50;
+      --flame: 0;
+      --glow-hue: 40;
+      --glow-saturation: 50;
+      --glow-lightness: 35;
+      --glow-alpha: 0.4;
+      --transparency-alpha: 0;
+      --glow: hsla(var(--glow-hue), calc(var(--glow-saturation) * 1%), calc(var(--glow-lightness) * 1%), var(--glow-alpha));
+      --transparent: hsla(0, 0%, 0%, var(--transparency-alpha));
+      --accent: #245ef2;
+      --accent-alpha: #245ef2bb;
+      --text: #000;
+      --text-secondary: #00000093;
+      display: flex;
+      overflow: hidden;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, hsl(180, 30%, calc(var(--lightness, 50) * 1%)), hsl(220, 50%, 70%));
+      padding: 20px;
+      transition: background 1s ease;
+    }
+
+    body::before {
+      content: "";
+      width: 100%;
+      height: 100%;
+      position: fixed;
+      left: 0;
+      top: 0;
+      background: radial-gradient(circle at 50%, #151515, #000) fixed 0 0 / 100% 100%;
+      opacity: 0;
+      transition: opacity ease 300ms;
+      will-change: opacity;
+      z-index: 0;
+    }
+
+    body.glow {
+      --accent: #f224da;
+      --accent-alpha: #f224dabb;
+      --text: #fff;
+      --text-secondary: #ffffff93;
+    }
+
+    body.glow::before {
+      opacity: 1;
+    }
+
+    body.glow .particles {
+      --glow-layer: 0 0 15.015vmin 1.5015vmin currentColor;
+      filter: contrast(1.5);
+      opacity: 1;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 40px 30px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.1);
+    }
+
+    .birthday-name {
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 30px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      animation: pulse 2s infinite;
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .birthday-button {
+      position: relative;
+      cursor: pointer;
+      width: 100%;
+      max-width: 280px;
+      margin-bottom: 2rem;
+      transition: transform 0.3s ease;
+      z-index: 15;
+    }
+
+    .birthday-button:hover {
+      transform: translateY(-5px);
+    }
+
+    .birthday-button__text {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      text-align: center;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: bold;
+      z-index: 10;
+      color: #fff;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    .birthday-button__text .char {
+      display: inline-block;
+      color: hsl(var(--hue, 0), calc(var(--char-sat, 0) * 1%), calc(var(--char-light, 0) * 1%));
+    }
+
+    .birthday-button:before {
+      content: '';
+      position: absolute;
+      height: 240px;
+      width: 240px;
+      background: radial-gradient(var(--glow), var(--transparent) 30%), radial-gradient(var(--glow), var(--transparent) 50%);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -70%) scale(calc(var(--flame) * 3));
+      z-index: 2;
+      filter: blur(15px);
+      opacity: var(--flame);
+    }
+
+    .birthday-button:after {
+      content: '';
+      height: 30px;
+      width: 400px;
+      filter: blur(15px);
+      position: absolute;
+      background: radial-gradient(var(--glow), var(--transparent) 20%), radial-gradient(var(--glow), var(--transparent));
+      top: 100%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(calc(var(--flame) * 1));
+      opacity: var(--flame);
+    }
+
+    .birthday-button__button {
+      width: 100%;
+      height: 90px;
+      position: relative;
+      border: 0;
+      background: linear-gradient(145deg, var(--primary), var(--secondary));
+      border-radius: 18px;
+      cursor: pointer;
+      padding: 0;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), 0 6px 6px rgba(0, 0, 0, 0.23);
+      transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+    }
+
+    .birthday-button__button:active {
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2), 0 3px 3px rgba(0, 0, 0, 0.15);
+      transform: translateY(2px);
+    }
+
+    .message {
+      font-size: 1.2rem;
+      color: var(--text);
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+      margin-top: 20px;
+      opacity: 0.9;
+    }
+
+    .controls {
+      position: fixed;
+      right: 20px;
+      top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-sizing: border-box;
+      padding: 20px;
+      text-align: right;
+      font-family: "Montserrat", sans-serif;
+      font-size: 0.9rem;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      z-index: 20;
+    }
+
+    input {
+      position: relative;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      margin: 0 -7px;
+    }
+
+    input:checked + label {
+      color: var(--accent);
+    }
+
+    input:checked + label::before {
+      transform: translateY(30%) scaleX(1);
+      transform-origin: left top;
+    }
+
+    input:focus-visible + label {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+    }
+
+    label {
+      position: relative;
+      margin: 0 0.6em 1em 0;
+      font-weight: 600;
+      cursor: pointer;
+      transition: color ease 400ms;
+      color: var(--text-secondary);
+      display: inline-block;
+    }
+
+    label::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      transform: translateY(30%) scaleX(0);
+      width: 100%;
+      height: 0.72em;
+      background-color: currentColor;
+      z-index: -1;
+      transform-origin: right top;
+      transition: transform ease 400ms;
+      opacity: 0.4;
+    }
+
+    label:hover {
+      color: var(--text);
+    }
+
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: var(--primary);
+      opacity: 0.8;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes fall {
+      from { transform: translateY(-100px) rotate(0deg); }
+      to { transform: translateY(100vh) rotate(360deg); }
+    }
+
+    /* Media Queries for Responsiveness */
+    @media (max-width: 768px) {
+      .controls {
+        right: 10px;
+        top: 10px;
+        padding: 15px;
+        font-size: 0.8rem;
+      }
+      
+      .container {
+        padding: 30px 20px;
+        margin: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .birthday-button {
+        transform: scale(0.9);
+      }
+      
+      .birthday-button__button {
+        height: 80px;
+      }
+      
+      .birthday-button__text {
+        font-size: 1.2rem;
+      }
+      
+      .birthday-name {
+        font-size: 2.2rem;
+        margin-bottom: 20px;
+      }
+      
+      .message {
+        font-size: 1rem;
+      }
+    }
+
+    @media (max-width: 320px) {
+      .birthday-button {
+        transform: scale(0.8);
+      }
+      
+      .birthday-button__button {
+        height: 70px;
+      }
+      
+      .birthday-button__text {
+        font-size: 1rem;
+      }
+      
+      .birthday-name {
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+      }
+      
+      .container {
+        padding: 20px 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Particle Animation Background -->
+  <div class="particles"></div>
+
+  <!-- Birthday Card Content -->
+  <div class="container">
+    <h1 class="birthday-name">Happy Birthday Chamiii!</h1>
+    
+    <div class="birthday-button">
+      <button class="birthday-button__button">
+        <span class="birthday-button__text">🎉 Celebrate! 🎉</span>
+      </button>
+    </div>
+    
+    <div class="message">
+      <p>Wishing you a day filled with happiness, joy, and magical moments! ✨</p>
+    </div>
+  </div>
+
+  
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/simplex-noise/2.4.0/simplex-noise.min.js'></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Birthday Card Functionality
+      let celebrationActive = false;
+      
+      // Create confetti elements
+      function createConfetti() {
+        const colors = ['#ff4081', '#7c4dff', '#00bcd4', '#ffc107', '#4caf50', '#e91e63'];
+        
+        for (let i = 0; i < 30; i++) {
+          const confetti = document.createElement('div');
+          confetti.className = 'confetti';
+          confetti.style.left = Math.random() * 100 + 'vw';
+          confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+          confetti.style.animation = `fall ${Math.random() * 3 + 2}s linear forwards`;
+          confetti.style.zIndex = '5';
+          document.body.appendChild(confetti);
+          
+          // Remove confetti after animation completes
+          setTimeout(() => {
+            if (confetti.parentNode) {
+              confetti.remove();
+            }
+          }, 5000);
+        }
+      }
+      
+      // Button click handler
+      document.querySelector('.birthday-button__button').addEventListener('click', function() {
+       window.location.href = "secondPage.html"; 
+      });
+    });
+
+    // Particle Animation System
+    const options = {
+      rainbow: false,
+      circles: false,
+      shadows: true,
+      depth: false,
+      organicShape: false,
+      insetBorders: false,
+      noiseFactor: 0.0005,
+      maxParticlesPerFrame: 6,
+      minParticleSize: 8,
+      maxParticleSize: 40,
+      zoomFactor: 1 / 6
+    };
+
+    let mouseX = null;
+    let mouseY = null;
+    let mousePosTimer = setTimeout(() => { }, 10);
+
+    const container = document.querySelector(".particles");
+    const controls = document.querySelectorAll('.controls input[type="checkbox"]');
+    const colors = [
+      "rgb(255, 64, 129)",
+      "rgb(124, 77, 255)", 
+      "rgb(0, 188, 212)",
+      "rgb(255, 193, 7)",
+      "rgb(156, 39, 176)",
+      "rgb(233, 30, 99)"
+    ];
+
+    const random = (min, max, round) => {
+      let value = min + Math.random() * (max - min);
+      return round ? Math.round(value) : value;
+    };
+
+    const color = () => {
+      return colors[random(0, colors.length - 1, true)];
+    };
+
+    const map = (value, inMin, inMax, outMin, outMax) => {
+      return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
+    };
+
+    const simplex = new SimplexNoise();
+
+    const createParticle = (index, x, y, hue, diameter) => {
+      let particle = document.createElement("div");
+      let particleCSS = particle.style;
+      particle.classList.add("particle");
+
+      let size = options.organicShape ? diameter : options.maxParticleSize;
+      let diameter_ = Math.max(options.minParticleSize, size) * options.zoomFactor;
+      let color_ = options.rainbow ? `hsl(${hue}deg, 70%, 65%)` : color();
+
+      particleCSS.width = `${diameter_}vmin`;
+      particleCSS.height = `${diameter_}vmin`;
+
+      if (options.insetBorders) {
+        particleCSS.border = `${10 * options.zoomFactor}vmin solid transparent`;
+        particleCSS.backgroundClip = `border-box`;
+      }
+
+      if (!options.shadows) particleCSS.setProperty("--shadow-opacity", "0");
+      if (!options.depth) particleCSS.setProperty("--depth-opacity", "0");
+
+      particleCSS.backgroundColor = color_;
+      particleCSS.color = color_;
+      particleCSS.borderRadius = options.circles ? "50%" : `${random(20, 60)}%`;
+      particleCSS.left = `${x}px`;
+      particleCSS.top = `${y}px`;
+
+      let shiftX = random(-80, 80) * options.zoomFactor;
+      let shiftY = random(-80, 80) * options.zoomFactor;
+      let delay = `${random(10, 40)}ms`;
+
+      particle.style.setProperty("--i", delay);
+      particle.style.setProperty("--shiftX", shiftX + "vmin");
+      particle.style.setProperty("--shiftY", shiftY + "vmin");
+
+      particle.addEventListener("animationend", () => particle.remove());
+
+      return particle;
+    };
+
+    const drawParticles = (x, y, hue, d) => {
+      let particleCount = random(1, options.maxParticlesPerFrame, true),
+          particleFragment = new DocumentFragment();
+
+      for (let i = 0; i < particleCount; ++i)
+        particleFragment.appendChild(createParticle(i, x, y, hue, d));
+
+      container.appendChild(particleFragment);
+    };
+
+    const render = (time) => {
+      const noiseX = (simplex.noise2D(0, time * options.noiseFactor) + 1) / 2;
+      const noiseY = (simplex.noise2D(1, time * options.noiseFactor) + 1) / 2;
+
+      const posX = mouseX || map(noiseX, 0, 1, 0, window.innerWidth);
+      const posY = mouseY || map(noiseY, 0, 1, 0, window.innerHeight);
+      const hue = map(mouseX || posX, 0, window.innerWidth, 0, 360);
+      const diameter = map(mouseY || posY, 0, window.innerHeight, 0, options.maxParticleSize);
+
+      drawParticles(posX, posY, hue, diameter);
+      requestAnimationFrame(render);
+    };
+
+    const clearMousePositions = (duration) => {
+      if (mousePosTimer) clearTimeout(mousePosTimer);
+      mousePosTimer = setTimeout(() => {
+        mouseX = null;
+        mouseY = null;
+      }, duration);
+    };
+
+    const setMousePositions = (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      clearMousePositions(1000);
+    };
+
+    const initControls = () => {
+      controls.forEach((control) => {
+        applyControl(control);
+        control.addEventListener("change", () => applyControl(control));
+      });
+    };
+
+    const applyControl = (control) => {
+      let optionsPrefix = control.dataset["changes"];
+      let classPrefix = control.dataset["class"];
+      let bodyclassList = document.body.classList;
+
+      if (optionsPrefix) {
+        options[optionsPrefix] = !!control.checked;
+      } else {
+        if (control.checked) bodyclassList.add(classPrefix);
+        else bodyclassList.remove(classPrefix);
+      }
+    };
+
+    window.addEventListener("load", () => {
+      initControls();
+      setTimeout(() => requestAnimationFrame(render), 400);
+    });
+
+    container.addEventListener("mousemove", (e) => setMousePositions(e));
+    container.addEventListener("touchmove", (e) => setMousePositions(e.touches[0]));
+    container.addEventListener("mouseout", () => clearMousePositions(100));
+    container.addEventListener("touchend", () => clearMousePositions(10));
+  </script>
+</body>
+</html>

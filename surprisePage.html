@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Birthday Gift - Edgy</title>
+  <style>
+    /* Kaushan+Script, oregano, sail */
+    @import url("https://fonts.googleapis.com/css?family=Kaushan+Script");
+
+    html,
+    body,
+    .container {
+      height: 100%;
+      font-family: "Kaushan Script", "Sail", cursive;
+    }
+
+    body {
+      background: #e74;
+      overflow: hidden;
+      background-image: linear-gradient(to bottom, #190e14, #0d0d4b 30%, #c76075 80%, #e9b64b 95%);
+      background-image: radial-gradient(circle at center bottom, #e9b64b, #c76075 15%, #0d0d4b 75%, #190e14 90%);
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Mobile Responsive Styles */
+    @media (max-width: 768px) {
+      .center-image {
+        top: 40%;
+      }
+    }
+
+    div#beach,
+    canvas#canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    div#beach {
+      background-image: url(https://dl.dropbox.com/s/oe0oce2udq44bj5/beachsil2.png);
+      background-position: bottom right;
+      background-size: 1700px;
+      background-repeat: no-repeat;
+    }
+
+    /* Center image in the white/light area of the background - Made taller */
+    .center-image {
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 50;
+      max-width: 300px;
+      max-height: 500px; /* Increased from 300px to 500px */
+      min-height: 400px; /* Added minimum height */
+      width: auto;
+      height: auto;
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+      border: 3px solid rgba(255, 255, 255, 0.8);
+      opacity: 0;
+      transition: all 0.5s ease;
+      object-fit: cover; /* Ensures proper aspect ratio */
+    }
+
+    .center-image.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.05);
+    }
+
+    /* Image Gallery */
+    .image-gallery {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 600px;
+      background: rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(15px);
+      border-radius: 25px;
+      padding: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      z-index: 99;
+    }
+
+    .gallery-title {
+      color: #fff;
+      text-align: center;
+      margin-bottom: 15px;
+      font-size: 18px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .image-scroll {
+      display: flex;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      gap: 15px;
+      padding: 10px 0;
+    }
+
+    .image-scroll::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .image-scroll::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+    }
+
+    .image-scroll::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+    }
+
+    .image-scroll::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    .gallery-image {
+      min-width: 120px;
+      height: 80px;
+      border-radius: 15px;
+      object-fit: cover;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: 2px solid transparent;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .gallery-image:hover {
+      transform: scale(1.1);
+      border-color: #fdc56d;
+      box-shadow: 0 6px 20px rgba(253, 197, 109, 0.4);
+    }
+
+    /* Modal for full-size images */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
+    }
+
+    .modal-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 35px;
+      color: #f1f1f1;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 1001;
+    }
+
+    .close:hover {
+      color: #fdc56d;
+    }
+
+    #people {
+      position: absolute;
+      bottom: 65px;
+      left: 40px;
+      width: 140px;
+    }
+
+    #car {
+      position: absolute;
+      bottom: 46px;
+      left: 180px;
+      width: 230px;
+    }
+
+    div#sea {
+      background-color: blue;
+      height: 85px;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-image: radial-gradient(circle at center top, #23485a, #0d0246);
+    }
+
+    .merrywrap {
+      position: absolute;
+      right: 0px;
+      left: 0px;
+      bottom: 0px;
+      top: 0px;
+      background-color: rgb(218, 102, 39);
+      transition: background-color 0.5s ease;
+    }
+
+    .giftbox {
+      position: absolute;
+      width: 300px;
+      height: 200px;
+      left: 50%;
+      margin-left: -150px;
+      bottom: 40px;
+      z-index: 10;
+    }
+
+    .giftbox>div {
+      background: #34495e;
+      position: absolute;
+    }
+
+    .giftbox>div:after,
+    .giftbox>div:before {
+      position: absolute;
+      content: "";
+      top: 0;
+    }
+
+    .giftbox:after {
+      position: absolute;
+      color: #fff;
+      width: 100%;
+      content: "Click Me!";
+      left: 0;
+      bottom: 0;
+      font-size: 24px;
+      text-align: center;
+      transform: rotate(-20deg);
+      transform-origin: 0 0;
+    }
+
+    .giftbox .cover {
+      width: 100%;
+      top: 0;
+      left: 0;
+      height: 25%;
+      z-index: 2;
+    }
+
+    .giftbox .cover:before {
+      position: absolute;
+      height: 100%;
+      left: 50%;
+      width: 50px;
+      transform: translateX(-50%);
+      background: #fdc56d;
+    }
+
+    .giftbox .cover>div {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      left: 50%;
+      top: -50px;
+      transform: translateX(-50%);
+    }
+
+    .giftbox .cover>div:before,
+    .giftbox .cover>div:after {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      content: "";
+      box-shadow: inset 0 0 0 15px #fdc56d;
+      border-radius: 30px;
+      transform-origin: 50% 100%;
+    }
+
+    .giftbox .cover>div:before {
+      transform: translateX(-45%) skewY(40deg);
+    }
+
+    .giftbox .cover>div:after {
+      transform: translateX(45%) skewY(-40deg);
+    }
+
+    .giftbox .box {
+      right: 5%;
+      left: 5%;
+      height: 80%;
+      bottom: 0;
+    }
+
+    .giftbox .box:before {
+      width: 50px;
+      height: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fdc56d;
+    }
+
+    .giftbox .box:after {
+      width: 100%;
+      height: 30px;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .icons {
+      position: absolute;
+      left: 10px;
+      height: auto;
+      transform: translateY(10px) rotate(-20deg);
+    }
+
+    .icons .row {
+      width: 100%;
+      text-align: center;
+    }
+
+    .icons .row span {
+      color: #e5e5e5;
+      text-shadow: 4px 4px 0 rgba(96, 125, 139, 0.4);
+      font-size: 50px;
+      display: inline-block;
+      opacity: 0;
+      transition: transform 0.5s ease-in, opacity 0.7s;
+    }
+
+    .step-1 .giftbox {
+      animation: wobble 0.5s linear infinite forwards;
+    }
+
+    .step-1 .cover {
+      animation: wobble 0.5s linear infinite 0.1s forwards;
+    }
+
+    .step-1 .icons .row span {
+      opacity: 1;
+    }
+
+    .step-2 .giftbox:after {
+      opacity: 0;
+    }
+
+    .step-3 .giftbox,
+    .step-4 .giftbox {
+      opacity: 0;
+      z-index: 1;
+    }
+
+    .step-3 .giftbox:after,
+    .step-4 .giftbox:after {
+      opacity: 0;
+    }
+
+    .step-2 .giftbox .cover {
+      animation: flyUp 0.4s ease-in forwards;
+    }
+
+    .step-2 .giftbox .box {
+      animation: flyDown 0.2s ease-in 0.05s forwards;
+    }
+
+    @keyframes wobble {
+      25% {
+        transform: rotate(4deg);
+      }
+
+      75% {
+        transform: rotate(-2deg);
+      }
+    }
+
+    @keyframes flyUp {
+      75% {
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(-1000px) rotate(20deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes flyDown {
+      75% {
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(100%);
+        opacity: 0;
+      }
+    }
+
+    .step-1 .icons .row span {
+      opacity: 0;
+    }
+
+    .step-1 .icons .row span:first-child {
+      transform: translateY(700%) translateX(600%);
+    }
+
+    .step-1 .icons .row span:nth-child(2) {
+      transform: translateY(700%) translateX(500%);
+    }
+
+    .step-1 .icons .row span:nth-child(3) {
+      transform: translateY(700%) translateX(400%);
+    }
+
+    .step-1 .icons .row span:nth-child(4) {
+      transform: translateY(700%) translateX(300%);
+    }
+
+    .step-1 .icons .row span:nth-child(5) {
+      transform: translateY(700%) translateX(200%);
+    }
+
+    .step-1 .icons .row span:nth-child(6) {
+      transform: translateY(700%) translateX(100%);
+    }
+
+    .step-1 .icons .row span:nth-child(7) {
+      transform: translateY(700%) translateX(0);
+    }
+
+    .step-1 .icons .row span:nth-child(8) {
+      transform: translateY(700%) translateX(-100%);
+    }
+
+    .step-1 .icons .row span:nth-child(9) {
+      transform: translateY(700%) translateX(-200%);
+    }
+
+    .step-1 .icons .row span:nth-child(10) {
+      transform: translateY(700%) translateX(-300%);
+    }
+
+    .step-1 .icons .row span:nth-child(11) {
+      transform: translateY(700%) translateX(-400%);
+    }
+
+    .step-1 .icons .row span:nth-child(12) {
+      transform: translateY(700%) translateX(-500%);
+    }
+
+    .step-1 .icons .row span:nth-child(13) {
+      transform: translateY(700%) translateX(-600%);
+    }
+
+    .step-2 .icons .row span:nth-child(2) {
+      -webkit-transition-delay: 0.1s;
+      transition-delay: 0.1s;
+    }
+
+    .step-2 .icons .row span:nth-child(3) {
+      -webkit-transition-delay: 0.15s;
+      transition-delay: 0.15s;
+    }
+
+    .step-2 .icons .row span:nth-child(4) {
+      -webkit-transition-delay: 0.2s;
+      transition-delay: 0.2s;
+    }
+
+    .step-2 .icons .row span:nth-child(5) {
+      -webkit-transition-delay: 0.25s;
+      transition-delay: 0.25s;
+    }
+
+    .step-2 .icons .row span:nth-child(6) {
+      -webkit-transition-delay: 0.3s;
+      transition-delay: 0.3s;
+    }
+
+    .step-2 .icons .row span:nth-child(7) {
+      -webkit-transition-delay: 0.35s;
+      transition-delay: 0.35s;
+    }
+
+    .step-2 .icons .row span:nth-child(8) {
+      -webkit-transition-delay: 0.4s;
+      transition-delay: 0.4s;
+    }
+
+    .step-2 .icons .row span:nth-child(9) {
+      -webkit-transition-delay: 0.45s;
+      transition-delay: 0.45s;
+    }
+
+    .step-2 .icons .row span:nth-child(10) {
+      -webkit-transition-delay: 0.5s;
+      transition-delay: 0.5s;
+    }
+
+    .step-2 .icons .row span:nth-child(11) {
+      -webkit-transition-delay: 0.55s;
+      transition-delay: 0.55s;
+    }
+
+    .step-2 .icons .row span:nth-child(12) {
+      -webkit-transition-delay: 0.6s;
+      transition-delay: 0.6s;
+    }
+
+    .step-2 .icons .row span:nth-child(13) {
+      -webkit-transition-delay: 0.65s;
+      transition-delay: 0.65s;
+    }
+
+    .step-2 .icons span,
+    .step-3 .icons span,
+    .step-4 .icons span {
+      opacity: 1;
+      transition-timing-function: cubic-bezier(0, 0, 0.2, 0.91);
+    }
+
+    .step-4 .icons .row span,
+    .step-3 .icons .row span {
+      color: #c6e2ff;
+      animation: neon 0.08s ease-in-out infinite alternate;
+    }
+
+    .step-4 .icons .row span:nth-child(even),
+    .step-3 .icons .row span:nth-child(even) {
+      animation-duration: 0.7s;
+    }
+
+    @keyframes neon {
+      from {
+        text-shadow: 0 0 6px rgba(202, 228, 225, 0.92), 0 0 30px rgba(202, 228, 225, 0.34), 0 0 12px rgba(30, 132, 242, 0.52), 0 0 21px rgba(30, 132, 242, 0.92), 0 0 34px rgba(30, 132, 242, 0.78), 0 0 54px rgba(30, 132, 242, 0.92);
+      }
+
+      to {
+        text-shadow: 0 0 6px rgba(202, 228, 225, 0.98), 0 0 30px rgba(202, 228, 225, 0.42), 0 0 12px rgba(30, 132, 242, 0.58), 0 0 22px rgba(30, 132, 242, 0.84), 0 0 38px rgba(30, 132, 242, 0.88), 0 0 60px #1e84f2;
+      }
+    }
+
+    .moon {
+      position: absolute;
+      top: 10%;
+      right: 200px;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: #ddd;
+      box-shadow: inset 20px -10px 0 0 #b9b9b9;
+    }
+
+    .moon .crater1 {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #bbb;
+      box-shadow: inset -3px 1.5px 0 0 #aaa;
+      top: 20px;
+      right: 20px;
+    }
+
+    .moon .crater2 {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #bbb;
+      box-shadow: inset -1px 0.5px 0 0 #aaa;
+      top: 45px;
+      right: 50px;
+    }
+
+    .moon .crater3 {
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: #bbb;
+      box-shadow: inset -1.5px 0.75px 0 0 #aaa;
+      top: 60px;
+      right: 25px;
+    }
+
+    /* Mobile Responsive Styles */
+    @media (max-width: 768px) {
+      .center-image {
+        max-width: 250px;
+        max-height: 400px; /* Increased from 250px */
+        min-height: 300px; /* Adjusted for mobile */
+        top: 45%; /* Adjusted position for mobile */
+      }
+
+      .image-gallery {
+        bottom: 10px;
+        width: 95%;
+        padding: 15px;
+      }
+
+      .gallery-title {
+        font-size: 16px;
+      }
+
+      .gallery-image {
+        min-width: 100px;
+        height: 70px;
+      }
+
+      .icons {
+        left: 5px;
+      }
+
+      .icons .row span {
+        font-size: 40px;
+      }
+
+      #people {
+        left: 20px;
+        bottom: 50px;
+        width: 120px;
+      }
+
+      div#beach {
+        background-size: 1200px;
+      }
+
+      .moon {
+        right: 50px;
+        width: 80px;
+        height: 80px;
+      }
+    }
+
+    @media (min-width: 1000px) {
+      .center-image {
+        max-width: 400px; /* Increased from 350px */
+        max-height: 600px; /* Increased from 350px to 600px */
+        min-height: 500px; /* Increased minimum height */
+        top: 35%; /* Adjusted position */
+      }
+
+      .icons {
+        left: 30px;
+      }
+
+      .icons .row span {
+        font-size: 56px;
+      }
+
+      #people {
+        left: 80px;
+        bottom: 70px;
+        width: 160px;
+      }
+
+      div#beach {
+        background-size: 2000px;
+      }
+
+      .moon {
+        right: 230px;
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+  <div class='moon'>
+    <div class='crater1'></div>
+    <div class='crater2'></div>
+    <div class='crater3'></div>
+  </div>
+  <canvas id="canvas"></canvas>
+  <div id="sea"></div>
+  <div id="beach"></div>
+  <img src="https://dl.dropbox.com/s/2k0mtrxc2dqurmh/jumping.png" alt="jumping-people" id="people" />
+
+  <!-- Center image that will appear in the white area - Now taller -->
+  <img src="https://picsum.photos/400/600?random=1" alt="Special Memory" class="center-image" id="centerImage" />
+
+  <div id="merrywrap" class="merrywrap">
+    <div class="giftbox">
+      <div class="cover">
+        <div></div>
+      </div>
+      <div class="box"></div>
+    </div>
+    <div class="icons">
+      <div class="row">
+        <span>F</span>
+        <span>e</span>
+        <span>l</span>
+        <span>i</span>
+        <span>z</span>
+      </div>
+      <div class="row">
+        <span>C</span>
+        <span>u</span>
+        <span>m</span>
+        <span>p</span>
+        <span>l</span>
+        <span>e</span>
+        <span>a</span>
+        <span>ñ</span>
+        <span>o</span>
+        <span>s</span>
+      </div>
+      <div class="row">
+        <span>E</span>
+        <span>d</span>
+        <span>g</span>
+        <span>y</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Image Gallery -->
+  <div class="image-gallery" style="display: none;" id="imageGallery">
+    <div class="gallery-title">✨ Special Memories ✨</div>
+    <div class="image-scroll" id="imageScroll">
+      <!-- Images will be populated by JavaScript -->
+    </div>
+  </div>
+
+  <!-- Modal for full-size images -->
+  <div id="imageModal" class="modal">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="modalImage">
+  </div>
+
+  <script>
+    // Sample images - replace with actual image URLs (using taller aspect ratios)
+    const galleryImages = [
+      "/assets/image1.jpg",      
+      "/assets/image12.jpg",      
+      "/assets/image3.jpg",      
+      "/assets/image4.jpg",      
+      "/assets/image5.jpg",      
+      "/assets/image6.jpg",      
+      "/assets/image7.jpg",      
+      "/assets/image8.jpg",      
+      "/assets/image9.jpg",      
+      "/assets/image10.jpg",      
+      "/assets/image11.jpg",      
+      "/assets/image2.jpg",      
+    ];
+
+    // Fireworks code
+    window.requestAnimFrame = function () {
+      return window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        function (callback) {
+          window.setTimeout(callback, 1000 / 60);
+        };
+    }();
+
+    var canvas = document.getElementById('canvas'),
+      ctx = canvas.getContext('2d'),
+      cw = window.innerWidth,
+      ch = window.innerHeight,
+      fireworks = [],
+      particles = [],
+      hue = 120,
+      limiterTotal = 5,
+      limiterTick = 0,
+      timerTotal = 80,
+      timerTick = 0,
+      mousedown = false,
+      mx,
+      my;
+
+    canvas.width = cw;
+    canvas.height = ch;
+
+    function random(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    function calculateDistance(p1x, p1y, p2x, p2y) {
+      var xDistance = p1x - p2x,
+        yDistance = p1y - p2y;
+      return Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
+    }
+
+    function Firework(sx, sy, tx, ty) {
+      this.x = sx;
+      this.y = sy;
+      this.sx = sx;
+      this.sy = sy;
+      this.tx = tx;
+      this.ty = ty;
+      this.distanceToTarget = calculateDistance(sx, sy, tx, ty);
+      this.distanceTraveled = 0;
+      this.coordinates = [];
+      this.coordinateCount = 3;
+      while (this.coordinateCount--) {
+        this.coordinates.push([this.x, this.y]);
+      }
+      this.angle = Math.atan2(ty - sy, tx - sx);
+      this.speed = 2;
+      this.acceleration = 1.05;
+      this.brightness = random(50, 70);
+      this.targetRadius = 1;
+    }
+
+    Firework.prototype.update = function (index) {
+      this.coordinates.pop();
+      this.coordinates.unshift([this.x, this.y]);
+
+      if (this.targetRadius < 8) {
+        this.targetRadius += 0.3;
+      } else {
+        this.targetRadius = 1;
+      }
+
+      this.speed *= this.acceleration;
+
+      var vx = Math.cos(this.angle) * this.speed,
+        vy = Math.sin(this.angle) * this.speed;
+      this.distanceTraveled = calculateDistance(this.sx, this.sy, this.x + vx, this.y + vy);
+
+      if (this.distanceTraveled >= this.distanceToTarget) {
+        createParticles(this.tx, this.ty);
+        fireworks.splice(index, 1);
+      } else {
+        this.x += vx;
+        this.y += vy;
+      }
+    };
+
+    Firework.prototype.draw = function () {
+      ctx.beginPath();
+      ctx.moveTo(this.coordinates[this.coordinates.length - 1][0], this.coordinates[this.coordinates.length - 1][1]);
+      ctx.lineTo(this.x, this.y);
+      ctx.strokeStyle = 'hsl(' + hue + ', 100%, ' + this.brightness + '%)';
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(this.tx, this.ty, this.targetRadius, 0, Math.PI * 2);
+      ctx.stroke();
+    };
+
+    function Particle(x, y) {
+      this.x = x;
+      this.y = y;
+      this.coordinates = [];
+      this.coordinateCount = 5;
+      while (this.coordinateCount--) {
+        this.coordinates.push([this.x, this.y]);
+      }
+      this.angle = random(0, Math.PI * 2);
+      this.speed = random(1, 10);
+      this.friction = 0.95;
+      this.gravity = 1;
+      this.hue = random(hue - 20, hue + 20);
+      this.brightness = random(50, 80);
+      this.alpha = 1;
+      this.decay = random(0.015, 0.03);
+    }
+
+    Particle.prototype.update = function (index) {
+      this.coordinates.pop();
+      this.coordinates.unshift([this.x, this.y]);
+      this.speed *= this.friction;
+      this.x += Math.cos(this.angle) * this.speed;
+      this.y += Math.sin(this.angle) * this.speed + this.gravity;
+      this.alpha -= this.decay;
+
+      if (this.alpha <= this.decay) {
+        particles.splice(index, 1);
+      }
+    };
+
+    Particle.prototype.draw = function () {
+      ctx.beginPath();
+      ctx.moveTo(this.coordinates[this.coordinates.length - 1][0], this.coordinates[this.coordinates.length - 1][1]);
+      ctx.lineTo(this.x, this.y);
+      ctx.strokeStyle = 'hsla(' + this.hue + ', 100%, ' + this.brightness + '%, ' + this.alpha + ')';
+      ctx.stroke();
+    };
+
+    function createParticles(x, y) {
+      var particleCount = 30;
+      while (particleCount--) {
+        particles.push(new Particle(x, y));
+      }
+    }
+
+    function loop() {
+      requestAnimFrame(loop);
+      hue += 0.5;
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+      ctx.fillRect(0, 0, cw, ch);
+      ctx.globalCompositeOperation = 'lighter';
+
+      var i = fireworks.length;
+      while (i--) {
+        fireworks[i].draw();
+        fireworks[i].update(i);
+      }
+
+      var i = particles.length;
+      while (i--) {
+        particles[i].draw();
+        particles[i].update(i);
+      }
+
+      if (timerTick >= timerTotal) {
+        if (!mousedown) {
+          fireworks.push(new Firework(cw / 2, ch, random(0, cw), random(0, ch / 2)));
+          timerTick = 0;
+        }
+      } else {
+        timerTick++;
+      }
+
+      if (limiterTick >= limiterTotal) {
+        if (mousedown) {
+          fireworks.push(new Firework(cw / 2, ch, mx, my));
+          limiterTick = 0;
+        }
+      } else {
+        limiterTick++;
+      }
+    }
+
+    // Gift box functionality
+    window.onload = function () {
+      var merrywrap = document.getElementById("merrywrap");
+      var box = merrywrap.getElementsByClassName("giftbox")[0];
+      var step = 1;
+      var stepMinutes = [2000, 2000, 1000, 1000];
+
+      function init() {
+        box.addEventListener("click", openBox, false);
+        populateImageGallery();
+      }
+
+      function stepClass(step) {
+        merrywrap.className = 'merrywrap';
+        merrywrap.className = 'merrywrap step-' + step;
+      }
+
+      function openBox() {
+        if (step === 1) {
+          box.removeEventListener("click", openBox, false);
+        }
+        stepClass(step);
+        if (step === 3) {
+        }
+        if (step === 4) {
+          reveal();
+          return;
+        }
+        setTimeout(openBox, stepMinutes[step - 1]);
+        step++;
+        
+        // Add click sound effect for each step
+        playClickSound();
+      }
+
+      init();
+      createMusicControl();
+    };
+
+    function populateImageGallery() {
+      const imageScroll = document.getElementById('imageScroll');
+      galleryImages.forEach((imgSrc, index) => {
+        const img = document.createElement('img');
+        img.src = imgSrc;
+        img.className = 'gallery-image';
+        img.alt = `Memory ${index + 1}`;
+        img.addEventListener('click', () => {
+          // Change the center image when gallery image is clicked
+          changeCenterImage(imgSrc);
+          // Also open modal
+          openModal(imgSrc);
+        });
+        imageScroll.appendChild(img);
+      });
+    }
+
+    let currentImageIndex = 0;
+    let autoSlideInterval;
+
+    function changeCenterImage(imageSrc) {
+      const centerImage = document.getElementById('centerImage');
+
+      // Add fade out effect
+      centerImage.style.opacity = '0.3';
+      centerImage.style.transform = 'translate(-50%, -50%) scale(0.9)';
+
+      // Change image after fade out
+      setTimeout(() => {
+        centerImage.src = imageSrc;
+
+        // Fade back in with new image
+        setTimeout(() => {
+          centerImage.style.opacity = '1';
+          centerImage.style.transform = 'translate(-50%, -50%) scale(1.05)';
+        }, 100);
+      }, 300);
+    }
+
+    function startAutoSlideshow() {
+      autoSlideInterval = setInterval(() => {
+        currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
+        changeCenterImage(galleryImages[currentImageIndex]);
+      }, 3000); // Change every 3 seconds
+    }
+
+    function stopAutoSlideshow() {
+      if (autoSlideInterval) {
+        clearInterval(autoSlideInterval);
+      }
+    }
+
+    function openModal(imgSrc) {
+      const modal = document.getElementById('imageModal');
+      const modalImg = document.getElementById('modalImage');
+      modal.style.display = 'block';
+      modalImg.src = imgSrc;
+    }
+
+    function reveal() {
+      document.querySelector('.merrywrap').style.backgroundColor = 'transparent';
+      document.getElementById('imageGallery').style.display = 'block';
+
+      // Play birthday music
+      playBirthdayMusic();
+
+      // Show the center image with animation
+      const centerImage = document.getElementById('centerImage');
+      // Set the first gallery image as the initial center image
+      centerImage.src = galleryImages[0];
+
+      setTimeout(() => {
+        centerImage.classList.add('show');
+        // Start automatic slideshow after the center image appears
+        setTimeout(() => {
+          startAutoSlideshow();
+        }, 1000);
+      }, 500);
+
+      loop();
+    }
+
+    // Birthday music function
+    function playBirthdayMusic() {
+      // Create audio context
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      
+      // Birthday song melody notes (Happy Birthday to You)
+      const notes = [
+        { freq: 261.63, duration: 0.5 }, // C4
+        { freq: 261.63, duration: 0.5 }, // C4
+        { freq: 293.66, duration: 1.0 }, // D4
+        { freq: 261.63, duration: 1.0 }, // C4
+        { freq: 349.23, duration: 1.0 }, // F4
+        { freq: 329.63, duration: 2.0 }, // E4
+        
+        { freq: 261.63, duration: 0.5 }, // C4
+        { freq: 261.63, duration: 0.5 }, // C4
+        { freq: 293.66, duration: 1.0 }, // D4
+        { freq: 261.63, duration: 1.0 }, // C4
+        { freq: 392.00, duration: 1.0 }, // G4
+        { freq: 349.23, duration: 2.0 }, // F4
+        
+        { freq: 261.63, duration: 0.5 }, // C4
+        { freq: 261.63, duration: 0.5 }, // C4
+        { freq: 523.25, duration: 1.0 }, // C5
+        { freq: 440.00, duration: 1.0 }, // A4
+        { freq: 349.23, duration: 1.0 }, // F4
+        { freq: 329.63, duration: 1.0 }, // E4
+        { freq: 293.66, duration: 2.0 }, // D4
+        
+        { freq: 466.16, duration: 0.5 }, // Bb4
+        { freq: 466.16, duration: 0.5 }, // Bb4
+        { freq: 440.00, duration: 1.0 }, // A4
+        { freq: 349.23, duration: 1.0 }, // F4
+        { freq: 392.00, duration: 1.0 }, // G4
+        { freq: 349.23, duration: 2.0 }  // F4
+      ];
+
+      let currentTime = audioContext.currentTime;
+      
+      notes.forEach((note, index) => {
+        // Create oscillator for each note
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.setValueAtTime(note.freq, currentTime);
+        oscillator.type = 'sine';
+        
+        // Envelope for smooth sound
+        gainNode.gain.setValueAtTime(0, currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.3, currentTime + 0.05);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, currentTime + note.duration);
+        
+        oscillator.start(currentTime);
+        oscillator.stop(currentTime + note.duration);
+        
+        currentTime += note.duration;
+      });
+
+      // Add some background harmony
+      setTimeout(() => {
+        playBackgroundChords(audioContext);
+      }, 1000);
+    }
+
+    function playBackgroundChords(audioContext) {
+      const chords = [
+        [261.63, 329.63, 392.00], // C major
+        [349.23, 440.00, 523.25], // F major
+        [392.00, 493.88, 587.33], // G major
+        [261.63, 329.63, 392.00]  // C major
+      ];
+
+      let currentTime = audioContext.currentTime + 1;
+      
+      chords.forEach((chord, chordIndex) => {
+        chord.forEach(freq => {
+          const oscillator = audioContext.createOscillator();
+          const gainNode = audioContext.createGain();
+          
+          oscillator.connect(gainNode);
+          gainNode.connect(audioContext.destination);
+          
+          oscillator.frequency.setValueAtTime(freq * 0.5, currentTime); // Lower octave
+          oscillator.type = 'triangle';
+          
+          gainNode.gain.setValueAtTime(0, currentTime);
+          gainNode.gain.linearRampToValueAtTime(0.1, currentTime + 0.1);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, currentTime + 2);
+          
+          oscillator.start(currentTime);
+          oscillator.stop(currentTime + 2);
+        });
+        
+        currentTime += 2;
+      });
+    }
+
+    // Click sound effect
+    function playClickSound() {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(200, audioContext.currentTime + 0.1);
+      oscillator.type = 'square';
+      
+      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.1);
+    }
+
+    // Add music control button
+    function createMusicControl() {
+      const musicButton = document.createElement('button');
+      musicButton.innerHTML = '🎵';
+      musicButton.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.2);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+        cursor: pointer;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+        display: none;
+      `;
+      
+      musicButton.addEventListener('mouseenter', function() {
+        this.style.background = 'rgba(255, 255, 255, 0.3)';
+        this.style.transform = 'scale(1.1)';
+      });
+      
+      musicButton.addEventListener('mouseleave', function() {
+        this.style.background = 'rgba(255, 255, 255, 0.2)';
+        this.style.transform = 'scale(1)';
+      });
+      
+      let musicPlaying = false;
+      musicButton.addEventListener('click', function() {
+        if (!musicPlaying) {
+          playBirthdayMusic();
+          this.innerHTML = '🔇';
+          musicPlaying = true;
+          setTimeout(() => {
+            this.innerHTML = '🎵';
+            musicPlaying = false;
+          }, 15000); // Reset after 15 seconds
+        }
+      });
+      
+      document.body.appendChild(musicButton);
+      
+      // Show music button after gift is opened
+      setTimeout(() => {
+        musicButton.style.display = 'block';
+      }, 5000);
+    }
+
+    // Modal functionality
+    document.addEventListener('DOMContentLoaded', function () {
+      const modal = document.getElementById('imageModal');
+      const closeBtn = document.querySelector('.close');
+
+      closeBtn.addEventListener('click', function () {
+        modal.style.display = 'none';
+      });
+
+      window.addEventListener('click', function (event) {
+        if (event.target == modal) {
+          modal.style.display = 'none';
+        }
+      });
+    });
+
+    // Mouse events for fireworks
+    canvas.addEventListener('mousedown', function (e) {
+      e.preventDefault();
+      mousedown = true;
+      mx = e.pageX - canvas.offsetLeft;
+      my = e.pageY - canvas.offsetTop;
+    });
+
+    canvas.addEventListener('mouseup', function (e) {
+      e.preventDefault();
+      mousedown = false;
+    });
+
+    canvas.addEventListener('mousemove', function (e) {
+      e.preventDefault();
+      mx = e.pageX - canvas.offsetLeft;
+      my = e.pageY - canvas.offsetTop;
+    });
+
+    // Touch events for mobile
+    canvas.addEventListener('touchstart', function (e) {
+      e.preventDefault();
+      mousedown = true;
+      var touch = e.touches[0];
+      mx = touch.pageX - canvas.offsetLeft;
+      my = touch.pageY - canvas.offsetTop;
+    });
+
+    canvas.addEventListener('touchend', function (e) {
+      e.preventDefault();
+      mousedown = false;
+    });
+
+    canvas.addEventListener('touchmove', function (e) {
+      e.preventDefault();
+      var touch = e.touches[0];
+      mx = touch.pageX - canvas.offsetLeft;
+      my = touch.pageY - canvas.offsetTop;
+    });
+
+    // Resize handler
+    window.addEventListener('resize', function () {
+      cw = window.innerWidth;
+      ch = window.innerHeight;
+      canvas.width = cw;
+      canvas.height = ch;
+    });
+  </script>
+
+</body>
+
+</html>
